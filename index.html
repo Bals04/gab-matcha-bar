@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GAB Matcha Bar · 抹茶 · Valencia</title>
+  <meta name="description" content="Specialty matcha, hojicha & coffee in Valencia, Philippines. Brewed with intention at GAB Matcha Bar." />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            matchaDeep: '#2f4a2a',
+            matcha:     '#6b8e4e',
+            matchaLite: '#b8c9a3',
+            cream:      '#f4f1e4',
+            parchment:  '#ebe7d3',
+            coffee:     '#5a3a22',
+            coffeeLite: '#8a6a4a',
+            ink:        '#1f2a1c',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'serif'],
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            mono:    ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --matcha-deep:#2f4a2a;
+      --matcha:#6b8e4e;
+      --matcha-lite:#b8c9a3;
+      --cream:#f4f1e4;
+      --parchment:#ebe7d3;
+      --coffee:#5a3a22;
+      --ink:#1f2a1c;
+    }
+    html { scroll-behavior: smooth; }
+    html {
+      scrollbar-color: var(--matcha) var(--parchment);
+      scrollbar-width: thin;
+    }
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--parchment);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--matcha-lite), var(--matcha), var(--matcha-deep));
+      border: 3px solid var(--parchment);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--matcha), var(--matcha-deep));
+    }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Inter, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.is-loading {
+      overflow: hidden;
+    }
+
+    /* Matcha loading screen */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(184,201,163,.55), transparent 32%),
+        linear-gradient(135deg, var(--cream), var(--parchment));
+      transition: opacity .65s ease, visibility .65s ease;
+      overflow: hidden;
+    }
+    .preloader-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 999px;
+      border: 1.5px solid rgba(47,74,42,.22);
+      transform: translate(-50%, -50%) scale(.3);
+      opacity: 0;
+      animation: teaRipple 2.6s ease-out infinite;
+    }
+    .preloader-ring.r1 { width: 220px; height: 220px; }
+    .preloader-ring.r2 { width: 220px; height: 220px; animation-delay: .9s; }
+    .preloader-ring.r3 { width: 220px; height: 220px; animation-delay: 1.8s; }
+
+    .preloader-steam {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 60px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, transparent, rgba(184,201,163,.55), transparent);
+      transform: translate(-50%, -180%);
+      filter: blur(2px);
+      opacity: 0;
+      animation: steam 2.4s ease-in-out infinite;
+    }
+    .preloader-steam.s1 { margin-left: -22px; animation-delay: 0s; }
+    .preloader-steam.s2 { margin-left:   0px; animation-delay: .4s; }
+    .preloader-steam.s3 { margin-left:  22px; animation-delay: .8s; }
+
+    .preloader-card {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      justify-items: center;
+      gap: 1rem;
+    }
+    .preloader-logo {
+      width: 118px;
+      height: 118px;
+      border-radius: 999px;
+      padding: .55rem;
+      background: rgba(244,241,228,.92);
+      box-shadow: 0 20px 55px rgba(47,74,42,.22);
+      animation: logoFloat 2s ease-in-out infinite;
+    }
+    .preloader-whisk {
+      position: absolute;
+      top: -8px; right: -18px;
+      width: 44px; height: 44px;
+      animation: whiskSpin 1.4s linear infinite;
+      transform-origin: 50% 50%;
+      filter: drop-shadow(0 4px 8px rgba(47,74,42,.25));
+    }
+    .preloader-text {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: .72rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--matcha-deep);
+    }
+    .preloader-text .dots::after {
+      content: '';
+      display: inline-block;
+      width: 1.4em;
+      text-align: left;
+      animation: dots 1.4s steps(4, end) infinite;
+    }
+    body.is-loaded .preloader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Subtle paper grain via tiled SVG noise */
+    .grain {
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.20  0 0 0 0 0.15  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* Corner ornament container */
+    .ornament-frame { position: relative; }
+    .ornament-frame > .corner {
+      position: absolute; width: 72px; height: 72px; pointer-events: none; opacity: .85;
+    }
+    .corner.tl { top: -10px; left: -10px; }
+    .corner.tr { top: -10px; right: -10px; transform: scaleX(-1); }
+    .corner.bl { bottom: -10px; left: -10px; transform: scaleY(-1); }
+    .corner.br { bottom: -10px; right: -10px; transform: scale(-1,-1); }
+
+    @media (max-width: 640px) {
+      .ornament-frame > .corner { width: 48px; height: 48px; }
+    }
+
+    /* Dotted leader for menu rows */
+    .leader {
+      flex: 1; border-bottom: 2px dotted rgba(47,74,42,0.28);
+      margin: 0 .75rem; transform: translateY(-6px);
+    }
+
+    /* Stamped poster card */
+    .stamp {
+      border: 1px solid rgba(47,74,42,0.35);
+      box-shadow: 6px 6px 0 0 rgba(47,74,42,0.10);
+    }
+
+    /* Inside GAB collage — Pinterest-brick layout
+       Desktop (2 cols × 6 row-track grid):
+         left col  : [ 1 ][ 1 ][ 1 ][ 4 ][ 4 ][ 4 ]
+         right col : [ 2 ][ 2 ][ 3 ][ 3 ][ 3 ][ 5 ]      (5 trails into row 7)
+       Effect: alternating heights between left & right columns — scrapbook feel.
+    */
+    .gallery-collage {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 120px;
+      grid-template-rows: repeat(6, 120px);
+      gap: 1rem;
+    }
+    .gallery-collage .gal-item {
+      min-height: 0;
+      height: 100%;
+      width: 100%;
+      border-radius: 1rem;
+    }
+    .gallery-collage .gal-item:nth-child(1) { grid-column: 1; grid-row: 1 / span 3; } /* tall */
+    .gallery-collage .gal-item:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; } /* short */
+    .gallery-collage .gal-item:nth-child(3) { grid-column: 2; grid-row: 3 / span 3; } /* tall */
+    .gallery-collage .gal-item:nth-child(4) { grid-column: 1; grid-row: 4 / span 3; } /* tall */
+    .gallery-collage .gal-item:nth-child(5) { grid-column: 2; grid-row: 6 / span 2; } /* short, trails */
+
+    /* Tablet: 2 cols, slightly tighter */
+    @media (max-width: 1024px) {
+      .gallery-collage {
+        grid-template-rows: repeat(6, 100px);
+      }
+    }
+
+    /* Mobile: single column stack */
+    @media (max-width: 640px) {
+      .gallery-collage {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-auto-rows: auto;
+      }
+      .gallery-collage .gal-item,
+      .gallery-collage .gal-item:nth-child(1),
+      .gallery-collage .gal-item:nth-child(2),
+      .gallery-collage .gal-item:nth-child(3),
+      .gallery-collage .gal-item:nth-child(4),
+      .gallery-collage .gal-item:nth-child(5) {
+        grid-column: 1;
+        grid-row: auto;
+        height: auto;
+        aspect-ratio: 4 / 5;
+      }
+    }
+
+    /* Nav blur fallback */
+    .nav-blur { backdrop-filter: saturate(140%) blur(8px); }
+
+    /* Menu tab active */
+    .tab-active {
+      background: var(--matcha-deep) !important;
+      color: var(--cream) !important;
+      border-color: var(--matcha-deep) !important;
+    }
+
+    /* Lightbox */
+    .lb-hidden { display: none; }
+
+    /* Tea-leaf divider glyph */
+    .divider {
+      display:flex; align-items:center; gap: 1rem; color: var(--matcha);
+    }
+    .divider::before, .divider::after {
+      content:''; flex:1; border-top: 1px solid rgba(47,74,42,0.25);
+    }
+
+    /* Scroll animation */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 60;
+      width: 100%;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: linear-gradient(90deg, var(--matcha-lite), var(--matcha), var(--coffee));
+      box-shadow: 0 0 18px rgba(184,201,163,.55);
+      pointer-events: none;
+    }
+
+    #nav {
+      transition: top .3s ease, background-color .3s ease, box-shadow .3s ease, transform .3s ease;
+    }
+    #nav.nav-scrolled {
+      top: .65rem;
+      background-color: rgba(244,241,228,.96);
+      box-shadow: 0 16px 40px rgba(31,42,28,.14);
+    }
+
+    .scroll-parallax {
+      transform: var(--parallax-base, translateZ(0)) translate3d(0, calc(var(--scroll-shift, 0) * 1px), 0);
+      will-change: transform;
+    }
+
+    .hero-copy {
+      opacity: var(--hero-opacity, 1);
+      transform: translate3d(0, calc(var(--hero-lift, 0) * 1px), 0);
+      will-change: opacity, transform;
+    }
+    body.is-loading .hero-copy {
+      opacity: 0;
+    }
+    body.is-loaded .hero-copy > * {
+      animation: heroRise .9s cubic-bezier(.16,1,.3,1) both;
+    }
+    body.is-loaded .hero-copy > *:nth-child(1) { animation-delay: .08s; }
+    body.is-loaded .hero-copy > *:nth-child(2) { animation-delay: .18s; }
+    body.is-loaded .hero-copy > *:nth-child(3) { animation-delay: .28s; }
+    body.is-loaded .hero-copy > *:nth-child(4) { animation-delay: .38s; }
+    body.is-loaded .hero-copy > *:nth-child(5) { animation-delay: .48s; }
+    body.is-loaded .hero-copy > *:nth-child(6) { animation-delay: .58s; }
+
+    .hero-fade {
+      opacity: var(--hero-fade, 1);
+    }
+    .hero-bg {
+      animation: heroImageSettle 1.4s ease-out both;
+      animation-play-state: paused;
+    }
+    body.is-loaded .hero-bg {
+      animation-play-state: running;
+    }
+
+    @keyframes teaRipple {
+      0%   { transform: translate(-50%, -50%) scale(.3); opacity: .8; }
+      80%  { opacity: .12; }
+      100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-14px) rotate(2deg); }
+    }
+    @keyframes whiskSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    @keyframes steam {
+      0%   { transform: translate(-50%, -180%) scaleY(.6); opacity: 0; }
+      30%  { opacity: .9; }
+      100% { transform: translate(-50%, -320%) scaleY(1.2); opacity: 0; }
+    }
+@keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+      100% { content: ''; }
+    }
+    @keyframes heroRise {
+      from {
+        opacity: 0;
+        transform: translateY(34px) scale(.97);
+        filter: blur(7px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+    @keyframes heroImageSettle {
+      from {
+        filter: saturate(.7) blur(3px);
+        transform: var(--parallax-base, scale(1.05)) translate3d(0, -18px, 0);
+      }
+      to {
+        filter: saturate(1) blur(0);
+        transform: var(--parallax-base, scale(1.05)) translate3d(0, 0, 0);
+      }
+    }
+
+    .section-reveal {
+      opacity: 0;
+      transform: translateY(120px) scale(.96);
+      transition: opacity 1s ease-out, transform 1.15s cubic-bezier(.16,1,.3,1);
+      will-change: opacity, transform;
+    }
+
+    .section-reveal.section-in {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .section-reveal::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(244,241,228,.72), rgba(244,241,228,0));
+      opacity: .75;
+      transform: translateY(0);
+      transition: opacity .8s ease-out, transform 1s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .section-reveal.section-in::after {
+      opacity: 0;
+      transform: translateY(-55%);
+    }
+
+    .section-reveal > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    #gallery.section-reveal::after {
+      background: linear-gradient(180deg, rgba(235,231,211,.82), rgba(235,231,211,0));
+    }
+
+    #visit.section-reveal::after {
+      background: linear-gradient(180deg, rgba(47,74,42,.82), rgba(47,74,42,0));
+    }
+
+    .reveal {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(110px) scale(.94);
+      transition: opacity 1s ease-out, filter 1s ease-out, transform 1.2s cubic-bezier(.16,1,.3,1);
+      will-change: opacity, transform;
+    }
+    .reveal-left  { transform: translateX(-180px) scale(.96); }
+    .reveal-right { transform: translateX(180px) scale(.96); }
+    .reveal-zoom  { transform: scale(.72); }
+    .reveal-lift  { transform: translateY(150px) rotate(1.5deg) scale(.95); }
+    .reveal.in { opacity: 1 !important; filter: blur(0); transform: translate(0,0) scale(1) rotate(0) !important; }
+    .reveal-delay-1 { transition-delay: .15s; }
+    .reveal-delay-2 { transition-delay: .3s; }
+    .reveal-delay-3 { transition-delay: .45s; }
+
+    /* Reduced motion: keep content visible and use only a short fade */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 0; transform: none; filter: none; transition: opacity .3s ease-out; }
+      .reveal.in { opacity: 1 !important; transform: none !important; }
+      .section-reveal { opacity: 0; transform: none; transition: opacity .3s ease-out; }
+      .section-reveal.section-in { opacity: 1; transform: none; }
+      .section-reveal::after { display: none; }
+      .scroll-progress { display: none; }
+      .scroll-parallax, .hero-copy { transform: none; }
+      .hero-copy, .hero-fade { opacity: 1; }
+      .preloader::before, .preloader::after, .preloader-logo,
+      body.is-loaded .hero-bg, body.is-loaded .hero-copy > * {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body class="is-loading bg-cream text-ink">
+  <div id="preloader" class="preloader" aria-label="Loading GAB Matcha Bar">
+    <span class="preloader-ring r1"></span>
+    <span class="preloader-ring r2"></span>
+    <span class="preloader-ring r3"></span>
+    <span class="preloader-steam s1"></span>
+    <span class="preloader-steam s2"></span>
+    <span class="preloader-steam s3"></span>
+    <div class="preloader-card">
+      <div style="position:relative;">
+        <img src="assets/logo.png" alt="GAB Matcha Bar" class="preloader-logo" />
+        <svg class="preloader-whisk" viewBox="0 0 80 80" aria-hidden="true"><use href="#whisk"/></svg>
+      </div>
+      <p class="preloader-text">steeping matcha<span class="dots"></span></p>
+    </div>
+  </div>
+  <div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ============== SVG SYMBOLS (corner ornaments) ============== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Matcha leaf sprig -->
+      <symbol id="leaf" viewBox="0 0 80 80">
+        <g fill="none" stroke="#6b8e4e" stroke-width="1.6" stroke-linecap="round">
+          <path d="M8 72 C 22 60, 30 44, 34 24" />
+          <path d="M34 24 C 28 28, 22 30, 14 30 C 18 22, 24 18, 34 24 Z" fill="#b8c9a3" fill-opacity=".55"/>
+          <path d="M28 40 C 22 42, 16 42, 10 40 C 14 34, 22 32, 30 36 Z" fill="#b8c9a3" fill-opacity=".55"/>
+          <path d="M22 56 C 16 58, 10 56, 6 52 C 10 48, 18 48, 24 52 Z" fill="#b8c9a3" fill-opacity=".55"/>
+          <path d="M40 20 C 46 14, 54 12, 62 14 C 58 22, 50 26, 42 24" fill="#6b8e4e" fill-opacity=".35"/>
+        </g>
+      </symbol>
+      <!-- Coffee bean cluster -->
+      <symbol id="beans" viewBox="0 0 80 80">
+        <g fill="#5a3a22" stroke="#3b2614" stroke-width="1">
+          <ellipse cx="22" cy="22" rx="11" ry="7" transform="rotate(-30 22 22)"/>
+          <path d="M14 22 q8 -4 16 0" fill="none" stroke="#f4f1e4" stroke-width="1.2"/>
+          <ellipse cx="44" cy="36" rx="11" ry="7" transform="rotate(20 44 36)"/>
+          <path d="M36 36 q8 -4 16 0" fill="none" stroke="#f4f1e4" stroke-width="1.2"/>
+          <ellipse cx="26" cy="52" rx="11" ry="7" transform="rotate(-10 26 52)"/>
+          <path d="M18 52 q8 -4 16 0" fill="none" stroke="#f4f1e4" stroke-width="1.2"/>
+        </g>
+      </symbol>
+      <!-- Bamboo whisk (chasen) -->
+      <symbol id="whisk" viewBox="0 0 80 80">
+        <g stroke="#8a6a4a" stroke-width="1.4" fill="none" stroke-linecap="round">
+          <rect x="34" y="6" width="12" height="22" rx="2" fill="#c9a878" stroke="#8a6a4a"/>
+          <path d="M34 28 C 28 40, 26 52, 28 62"/>
+          <path d="M38 28 C 36 42, 36 54, 36 64"/>
+          <path d="M42 28 C 44 42, 44 54, 44 64"/>
+          <path d="M46 28 C 52 40, 54 52, 52 62"/>
+          <path d="M40 28 C 40 44, 40 56, 40 66"/>
+          <ellipse cx="40" cy="66" rx="14" ry="4" fill="#b8c9a3" fill-opacity=".5" stroke="#6b8e4e"/>
+        </g>
+      </symbol>
+      <!-- Tea-leaf glyph (small) -->
+      <symbol id="leafGlyph" viewBox="0 0 24 24">
+        <path d="M3 21 C 10 18, 18 10, 21 3 C 14 5, 6 12, 3 21Z" fill="#6b8e4e"/>
+        <path d="M3 21 C 10 18, 18 10, 21 3" stroke="#2f4a2a" stroke-width="1" fill="none"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ============== NAVBAR ============== -->
+  <header id="nav" class="absolute top-3 left-3 right-3 md:left-1/2 md:right-auto md:-translate-x-1/2 z-40 bg-cream/90 nav-blur rounded-lg shadow-sm border border-matchaDeep/10">
+    <div class="flex items-center justify-between md:justify-start gap-6 px-4 sm:px-5 py-2.5 sm:py-3">
+      <a href="#top" class="flex items-center gap-2">
+        <img src="assets/logo.png" alt="GAB Matcha Bar" class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-cream/80 p-1" />
+        <span class="font-display text-lg sm:text-xl text-matchaDeep tracking-wide">GAB <span class="text-matcha">matcha</span> bar</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-7 font-mono text-[13px] text-matchaDeep">
+        <a href="#menu" class="hover:text-matcha">menu</a>
+        <a href="#gallery" class="hover:text-matcha">gallery</a>
+        <a href="#review" class="hover:text-matcha">review</a>
+        <a href="#visit" class="hover:text-matcha">visit</a>
+        <a href="https://www.facebook.com/profile.php?id=61578773473592" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-full bg-matchaDeep text-cream border border-matchaDeep hover:bg-matcha hover:border-matcha transition">check us out →</a>
+      </nav>
+      <button id="navToggle" class="md:hidden text-matchaDeep p-2 -mr-1 rounded-md hover:bg-matchaDeep/10 transition" aria-label="Open menu">
+        <svg id="navToggleIcon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+    <div id="navMobile" class="md:hidden hidden bg-cream/98 border-t border-matchaDeep/15 rounded-b-lg overflow-hidden">
+      <div class="px-2 py-2 flex flex-col font-mono text-sm text-matchaDeep divide-y divide-matchaDeep/10">
+        <a href="#menu"    class="px-4 py-3 hover:bg-matchaDeep/5 rounded-md">menu</a>
+        <a href="#gallery" class="px-4 py-3 hover:bg-matchaDeep/5 rounded-md">gallery</a>
+        <a href="#review"  class="px-4 py-3 hover:bg-matchaDeep/5 rounded-md">review</a>
+        <a href="#visit"   class="px-4 py-3 hover:bg-matchaDeep/5 rounded-md">visit</a>
+        <a href="https://www.facebook.com/profile.php?id=61578773473592" target="_blank" rel="noopener" class="mx-4 my-3 px-4 py-2.5 text-center rounded-full bg-matchaDeep text-cream hover:bg-matcha transition">check us out →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section id="top" class="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
+    <img src="assets/store-pics/681278152_122157861476959115_6574301504590722351_n.jpg"
+         alt="GAB Matcha Bar interior"
+         class="hero-bg absolute inset-0 w-full h-full object-cover scroll-parallax" data-parallax="-0.16" style="--parallax-base: scale(1.05);" />
+    <div class="absolute inset-0 bg-matchaDeep/75 hero-fade"></div>
+    <div class="absolute inset-0 grain opacity-30 mix-blend-multiply"></div>
+
+    <!-- Corner ornaments -->
+    <svg class="absolute top-6 left-6 w-20 h-20 sm:w-28 sm:h-28 opacity-80 scroll-parallax" data-parallax="0.18" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+    <svg class="absolute top-6 right-6 w-20 h-20 sm:w-28 sm:h-28 opacity-80 scroll-parallax" data-parallax="0.12" viewBox="0 0 80 80" style="--parallax-base: scaleX(-1);"><use href="#leaf"/></svg>
+    <svg class="absolute bottom-6 left-6 w-20 h-20 sm:w-28 sm:h-28 opacity-70 scroll-parallax" data-parallax="-0.08" viewBox="0 0 80 80" style="--parallax-base: scaleY(-1);"><use href="#beans"/></svg>
+    <svg class="absolute bottom-6 right-6 w-20 h-20 sm:w-28 sm:h-28 opacity-70 scroll-parallax" data-parallax="-0.14" viewBox="0 0 80 80" style="--parallax-base: scale(-1,-1);"><use href="#beans"/></svg>
+
+    <div class="hero-copy relative h-full flex flex-col items-center justify-center text-center px-6">
+      <img src="assets/logo.png" alt="" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-cream/90 p-2 mb-6 shadow-2xl" />
+      <p class="font-mono uppercase tracking-[0.35em] text-[11px] sm:text-xs text-matchaLite mb-4">// GAB matcha bar · 抹茶</p>
+      <h1 class="font-display text-cream text-5xl sm:text-7xl md:text-8xl leading-[1.05] max-w-3xl">
+        Matcha,<br/><em class="text-matchaLite">brewed with intention.</em>
+      </h1>
+      <p class="mt-6 max-w-xl text-cream/85 text-base sm:text-lg">
+        Specialty matcha, hojicha &amp; coffee handcrafted in Valencia,
+      </p>
+      <div class="mt-9 flex flex-wrap items-center justify-center gap-4">
+        <a href="#menu" class="px-7 py-3 rounded-full bg-cream text-matchaDeep font-mono text-sm hover:bg-matchaLite transition">view menu</a>
+        <a href="#visit" class="px-7 py-3 rounded-full border border-cream/70 text-cream font-mono text-sm hover:bg-cream/10 transition">visit us</a>
+      </div>
+
+      <a href="#menu" class="absolute bottom-8 text-cream/80 animate-pulse" aria-label="Scroll down">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9l6 6 6-6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============== MENU ============== -->
+  <section id="menu" class="section-reveal relative py-24 sm:py-32 bg-cream grain">
+    <div class="relative z-[2] max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12 reveal">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs text-matcha mb-3">// our offerings</p>
+        <h2 class="font-display text-5xl sm:text-6xl text-matchaDeep">The Menu</h2>
+        <div class="divider mt-6 max-w-md mx-auto">
+          <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#leafGlyph"/></svg>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 reveal reveal-delay-1" id="tabs">
+        <button data-tab="matcha"    class="tab tab-active px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">matcha</button>
+        <button data-tab="hojicha"   class="tab px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">hojicha</button>
+        <button data-tab="coffee"    class="tab px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">coffee</button>
+        <button data-tab="noncoffee" class="tab px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">non-coffee</button>
+        <button data-tab="food"      class="tab px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">food</button>
+        <button data-tab="addons"    class="tab px-4 py-2 rounded-full border border-matchaDeep/40 font-mono text-xs sm:text-sm text-matchaDeep hover:bg-matchaDeep hover:text-cream transition">add-ons</button>
+      </div>
+
+      <!-- Menu card -->
+      <div class="ornament-frame stamp bg-parchment rounded-2xl p-6 sm:p-12 reveal reveal-delay-2">
+        <svg class="corner tl" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+        <svg class="corner tr" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+        <svg class="corner bl" viewBox="0 0 80 80"><use href="#whisk"/></svg>
+        <svg class="corner br" viewBox="0 0 80 80"><use href="#whisk"/></svg>
+
+        <!-- MATCHA -->
+        <div class="panel" data-panel="matcha">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Matcha Menu</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">stone-ground · whisked · earthy &amp; smooth</p>
+          <ul class="space-y-6">
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Matcha Einspanner</span><span class="leader"></span><span class="font-mono text-matchaDeep">180php</span></div>
+              <p class="text-sm text-ink/75 mt-1">A rich, layered drink featuring premium matcha topped with a velvety cloud of lightly sweetened cream. Smooth, bold, and indulgently aromatic in every sip.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Matcha Creamy Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">190php</span></div>
+              <p class="text-sm text-ink/75 mt-1">A comforting blend of finely whisked matcha and creamy milk, balanced for a silky texture and mellow earthy flavor.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Matcha Seasalt Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">190php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Smooth Uji matcha layered with creamy milk and topped with a light seasalt foam — the perfect balance of earthy matcha and sweet-salty cream.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Matcha Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">160php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Smooth matcha, lightly sweet.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Pure Matchano</span><span class="leader"></span><span class="font-mono text-matchaDeep">150php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Straight matcha, Americano style.</p>
+            </li>
+          </ul>
+          <p class="mt-8 font-mono text-xs text-coffee">+ 30php for upsize</p>
+        </div>
+
+        <!-- HOJICHA -->
+        <div class="panel hidden" data-panel="hojicha">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Hojicha Menu</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">roasted green tea · toasty · low caffeine</p>
+          <ul class="space-y-6">
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Hojicha Cheesecake Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">200php</span></div>
+              <p class="text-sm text-ink/75 mt-1">A liquid dessert. Our signature smoky roasted tea layered with a rich, velvety cream cheese foam and a dash of graham crumble.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Hojicha Seasalt Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">180php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Smooth roasted matcha layered with creamy milk and topped with a light seasalt foam — earthy &amp; sweet-salty.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Hojicha Cocoa Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">190php</span></div>
+              <p class="text-sm text-ink/75 mt-1">The ultimate comfort cup. Earthy, toasted green tea meets deep, decadent chocolate — a sophisticated twist on a mocha.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Hojicha Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">170php</span></div>
+              <p class="text-sm text-ink/75 mt-1">The timeless classic. Finely ground roasted green tea whisked with silky steamed milk. Low caffeine, high aroma, perfectly balanced.</p>
+            </li>
+          </ul>
+          <p class="mt-8 font-mono text-xs text-coffee">+ 30php for upsize</p>
+        </div>
+
+        <!-- COFFEE -->
+        <div class="panel hidden" data-panel="coffee">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Coffee Menu</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">hot / iced · upsized already</p>
+          <ul class="space-y-6">
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Spanish Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">160php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Rich espresso blended with silky milk and a touch of condensed sweetness for a smooth, indulgent finish.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Brown Sugar Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">160php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Deep caramel notes from melted brown sugar paired with espresso and milk — warm and comforting sweetness.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Caramel Drizzle Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">170php</span></div>
+              <p class="text-sm text-ink/75 mt-1">A classic latte elevated with buttery caramel and a generous drizzle — a sweet, velvety treat.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Seasalt Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">180php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Smooth espresso with creamy milk, topped with a light salted foam — sweet and savory in every sip.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Cafe Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">150php</span></div>
+              <p class="text-sm text-ink/75 mt-1">A balanced blend of espresso and steamed milk — smooth, mellow, effortlessly classic.</p>
+            </li>
+            <li>
+              <div class="flex items-baseline"><span class="font-mono text-matchaDeep">Americano</span><span class="leader"></span><span class="font-mono text-matchaDeep">100php</span></div>
+              <p class="text-sm text-ink/75 mt-1">Bold espresso softened with hot water — a clean, rich coffee flavor that's simple and strong.</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- NON-COFFEE -->
+        <div class="panel hidden" data-panel="noncoffee">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Non-Coffee / Matcha</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">refreshers, sodas &amp; milks</p>
+          <ul class="space-y-5">
+            <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Blueberry Soda</span><span class="leader"></span><span class="font-mono text-matchaDeep">99php</span></li>
+            <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Strawberry Soda</span><span class="leader"></span><span class="font-mono text-matchaDeep">99php</span></li>
+            <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Chocolate Latte</span><span class="leader"></span><span class="font-mono text-matchaDeep">130php</span></li>
+            <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Strawberry Milk</span><span class="leader"></span><span class="font-mono text-matchaDeep">130php</span></li>
+            <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Milky Oreo</span><span class="leader"></span><span class="font-mono text-matchaDeep">150php</span></li>
+          </ul>
+          <p class="mt-8 font-mono text-xs text-coffee">+ 30php for upsize</p>
+        </div>
+
+        <!-- FOOD -->
+        <div class="panel hidden" data-panel="food">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Snacks · Sandwiches · Pasta</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">kitchen favorites</p>
+          <div class="grid sm:grid-cols-2 gap-x-10 gap-y-4">
+            <div>
+              <p class="font-mono text-xs uppercase tracking-widest text-matcha mb-3">snacks</p>
+              <ul class="space-y-3">
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Fries (bbq · sourcream · cheese)</span><span class="leader"></span><span class="font-mono text-matchaDeep">99php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Snack Combo (fries, kropek, squidrings)</span><span class="leader"></span><span class="font-mono text-matchaDeep">149php</span></li>
+              </ul>
+            </div>
+            <div>
+              <p class="font-mono text-xs uppercase tracking-widest text-matcha mb-3">sandwiches</p>
+              <ul class="space-y-3">
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Monte Cristo</span><span class="leader"></span><span class="font-mono text-matchaDeep">170php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Caramel Peanut Butter Sandwich</span><span class="leader"></span><span class="font-mono text-matchaDeep">160php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Chick Fillet Burger w/ fries</span><span class="leader"></span><span class="font-mono text-matchaDeep">150php</span></li>
+              </ul>
+            </div>
+            <div class="sm:col-span-2 mt-4">
+              <p class="font-mono text-xs uppercase tracking-widest text-matcha mb-3">pasta</p>
+              <ul class="space-y-3">
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Aglio Olio</span><span class="leader"></span><span class="font-mono text-matchaDeep">199php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Chicken Alfredo</span><span class="leader"></span><span class="font-mono text-matchaDeep">180php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Carbonara</span><span class="leader"></span><span class="font-mono text-matchaDeep">150php</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADD-ONS -->
+        <div class="panel hidden" data-panel="addons">
+          <h3 class="font-display text-4xl text-matchaDeep mb-1">Alternatives &amp; Add-ons</h3>
+          <p class="font-mono text-xs text-coffee/80 mb-8">make it yours</p>
+          <div class="grid sm:grid-cols-2 gap-x-10 gap-y-6">
+            <div>
+              <p class="font-mono text-xs uppercase tracking-widest text-matcha mb-3">milk</p>
+              <ul class="space-y-3">
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Oatmilk</span><span class="leader"></span><span class="font-mono text-matchaDeep">40php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Almond Milk</span><span class="leader"></span><span class="font-mono text-matchaDeep">45php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Full Cream Milk</span><span class="leader"></span><span class="font-mono text-matchaDeep">30php</span></li>
+              </ul>
+            </div>
+            <div>
+              <p class="font-mono text-xs uppercase tracking-widest text-matcha mb-3">sweetener</p>
+              <ul class="space-y-3">
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Agave</span><span class="leader"></span><span class="font-mono text-matchaDeep">25php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Milk Syrup</span><span class="leader"></span><span class="font-mono text-matchaDeep">20php</span></li>
+                <li class="flex items-baseline"><span class="font-mono text-matchaDeep">Homemade Syrup</span><span class="leader"></span><span class="font-mono text-matchaDeep">30php</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== GALLERY ============== -->
+  <section id="gallery" class="section-reveal relative py-24 sm:py-32 bg-parchment">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-12 reveal">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs text-matcha mb-3">// the shop</p>
+        <h2 class="font-display text-5xl sm:text-6xl text-matchaDeep">Inside GAB</h2>
+        <div class="divider mt-6 max-w-md mx-auto">
+          <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#leafGlyph"/></svg>
+        </div>
+      </div>
+
+      <div id="gallery-grid" class="gallery-collage reveal reveal-lift">
+        <button class="gal-item group relative overflow-hidden stamp bg-cream" data-idx="0">
+          <img src="assets/store-pics/681278152_122157861476959115_6574301504590722351_n.jpg" alt="Cafe interior" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        </button>
+        <button class="gal-item group relative overflow-hidden stamp bg-cream" data-idx="1">
+          <img src="assets/store-pics/659033448_18044866244606993_8849876472189119950_n.jpg" alt="Signature drinks" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        </button>
+        <button class="gal-item group relative overflow-hidden stamp bg-cream" data-idx="2">
+          <img src="assets/store-pics/685983688_122158835936959115_6739841896039390231_n.jpg" alt="Iced matcha latte" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        </button>
+        <button class="gal-item group relative overflow-hidden stamp bg-cream" data-idx="3">
+          <img src="assets/store-pics/666351247_122155808816959115_5482203190720789961_n.jpg" alt="Mug shelf" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        </button>
+        <button class="gal-item group relative overflow-hidden stamp bg-cream" data-idx="4">
+          <img src="assets/store-pics/za.jpg" alt="Shop details" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== REVIEW ============== -->
+  <section id="review" class="section-reveal relative py-24 sm:py-32 bg-cream grain">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12 reveal">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs text-matcha mb-3">// soft opening · customer note</p>
+        <h2 class="font-display text-5xl sm:text-6xl text-matchaDeep">Brewed with love.</h2>
+      </div>
+
+      <div class="ornament-frame stamp rounded-2xl bg-parchment p-6 sm:p-10 grid md:grid-cols-5 gap-8 items-center reveal reveal-lift">
+        <svg class="corner tl" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+        <svg class="corner br" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+        <div class="md:col-span-2 reveal reveal-left">
+          <img src="assets/soft-opening-review/649219395_18033858404606993_511534446465834143_n.jpg"
+               alt="Customer review screenshot"
+               class="w-full rounded-xl border border-matchaDeep/15 shadow-md" />
+        </div>
+        <div class="md:col-span-3 reveal reveal-right reveal-delay-1">
+          <svg class="w-10 h-10 text-matcha mb-4" viewBox="0 0 24 24" fill="currentColor"><path d="M9 7H5v6h4l-2 4h3l2-4V7zm10 0h-4v6h4l-2 4h3l2-4V7z"/></svg>
+          <p class="font-display italic text-2xl sm:text-3xl text-matchaDeep leading-snug">
+            "Super the best ma'am! 100/100 gyud. Finally nakita na nako ang matcha latte nga akong ginapangita." 🍵✨
+          </p>
+          <p class="mt-6 font-mono text-xs text-coffee uppercase tracking-widest">— customer · soft opening</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== VISIT ============== -->
+  <section id="visit" class="section-reveal relative py-24 sm:py-32 bg-matchaDeep text-cream overflow-hidden">
+    <svg class="absolute top-8 left-8 w-24 h-24 opacity-30" viewBox="0 0 80 80"><use href="#leaf"/></svg>
+    <svg class="absolute bottom-8 right-8 w-24 h-24 opacity-30" viewBox="0 0 80 80" style="transform:scale(-1,-1)"><use href="#whisk"/></svg>
+
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="text-center mb-12 reveal">
+        <p class="font-mono uppercase tracking-[0.3em] text-xs text-matchaLite mb-3">// come by</p>
+        <h2 class="font-display text-5xl sm:text-6xl text-cream">Visit Us</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-10 items-stretch">
+        <div class="space-y-8 reveal reveal-left">
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-matchaLite mb-2">location</p>
+            <p class="font-display text-2xl leading-snug">Purok 16A, Bagonvilla Street,<br/>Valencia, Philippines 8709</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=Purok+16A+Bagonvilla+Street+Valencia+Philippines+8709"
+               target="_blank" rel="noopener"
+               class="inline-block mt-4 px-5 py-2 rounded-full bg-cream text-matchaDeep font-mono text-xs hover:bg-matchaLite transition">
+              get directions →
+            </a>
+          </div>
+
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-matchaLite mb-2">hours</p>
+            <p class="font-display text-xl">Daily · check our socials for hours</p>
+          </div>
+
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-matchaLite mb-2">call / message</p>
+            <a href="tel:09562241870" class="font-display text-2xl hover:text-matchaLite">📞 0956 224 1870</a>
+          </div>
+
+          <div>
+            <p class="font-mono text-xs uppercase tracking-widest text-matchaLite mb-3">socials</p>
+            <div class="flex flex-wrap gap-3">
+              <a href="https://instagram.com/gabmatcha.bar" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cream/40 hover:bg-cream hover:text-matchaDeep transition font-mono text-sm">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+                @gabmatcha.bar
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=61578773473592" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cream/40 hover:bg-cream hover:text-matchaDeep transition font-mono text-sm">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h3l1-4h-4V7.5c0-1.1.4-2 2-2h2V2.2C16.6 2.1 15.4 2 14.1 2 11.3 2 9.5 3.7 9.5 6.9V10H6v4h3.5v8H13z"/></svg>
+                GAB Matcha Bar
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl overflow-hidden stamp border-cream/30 min-h-[360px] reveal reveal-right reveal-delay-1">
+          <iframe
+            class="w-full h-full min-h-[360px]"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Bagonvilla+Street+Valencia+Bukidnon+Philippines&output=embed">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer class="bg-cream border-t border-matchaDeep/15 py-10">
+    <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-matchaDeep">
+      <div class="flex items-center gap-3">
+        <img src="assets/logo.png" alt="" class="h-9 w-9 rounded-full" />
+        <span class="font-display text-lg">GAB matcha bar · 抹茶</span>
+      </div>
+      <p class="font-mono text-xs text-coffee">© <span id="yr"></span> GAB Matcha Bar · made with 🍵 in Valencia</p>
+    </div>
+  </footer>
+
+  <!-- ============== LIGHTBOX ============== -->
+  <div id="lightbox" class="hidden fixed inset-0 z-50 bg-matchaDeep/90 backdrop-blur-sm items-center justify-center p-4">
+    <button id="lbClose" class="absolute top-5 right-5 text-cream/90 hover:text-cream" aria-label="Close">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <button id="lbPrev" class="absolute left-3 sm:left-8 text-cream/80 hover:text-cream" aria-label="Previous">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button id="lbNext" class="absolute right-3 sm:right-8 text-cream/80 hover:text-cream" aria-label="Next">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+    <img id="lbImg" src="" alt="" class="max-w-full max-h-[88vh] rounded-xl shadow-2xl" />
+  </div>
+
+  <!-- ============== JS ============== -->
+  <script>
+    // matcha preloader + hero entrance
+    const preloader = document.getElementById('preloader');
+    setTimeout(() => {
+      document.body.classList.remove('is-loading');
+      document.body.classList.add('is-loaded');
+      preloader.setAttribute('aria-hidden', 'true');
+    }, 1800);
+
+    // year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // stagger gallery reveal
+    document.querySelectorAll('#gallery-grid .gal-item').forEach((el, i) => {
+      el.style.transitionDelay = (i * 90) + 'ms';
+    });
+
+    // scroll-driven motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scrollProgress = document.getElementById('scrollProgress');
+    const nav = document.getElementById('nav');
+    const hero = document.getElementById('top');
+    const heroCopy = document.querySelector('.hero-copy');
+    const heroFade = document.querySelector('.hero-fade');
+    const parallaxItems = document.querySelectorAll('.scroll-parallax');
+    let ticking = false;
+
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    const updateScrollAnimation = () => {
+      const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      const progress = clamp(window.scrollY / maxScroll, 0, 1);
+      scrollProgress.style.transform = `scaleX(${progress})`;
+
+      nav.classList.toggle('nav-scrolled', window.scrollY > 24);
+
+      if (!prefersReducedMotion && hero) {
+        const heroProgress = clamp(window.scrollY / hero.offsetHeight, 0, 1);
+        heroCopy.style.setProperty('--hero-opacity', (1 - heroProgress * 1.35).toFixed(3));
+        heroCopy.style.setProperty('--hero-lift', (-34 * heroProgress).toFixed(2));
+        heroFade.style.setProperty('--hero-fade', (1 - heroProgress * .28).toFixed(3));
+
+        parallaxItems.forEach((el) => {
+          const speed = Number(el.dataset.parallax || 0);
+          el.style.setProperty('--scroll-shift', (window.scrollY * speed).toFixed(2));
+        });
+      }
+
+      ticking = false;
+    };
+
+    const requestScrollAnimation = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollAnimation);
+        ticking = true;
+      }
+    };
+
+    updateScrollAnimation();
+    window.addEventListener('scroll', requestScrollAnimation, { passive: true });
+    window.addEventListener('resize', requestScrollAnimation);
+
+    // scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const sectionReveals = document.querySelectorAll('.section-reveal');
+    if ('IntersectionObserver' in window) {
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('section-in');
+            sectionObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.28, rootMargin: '0px 0px -18% 0px' });
+
+      sectionReveals.forEach((el) => sectionObserver.observe(el));
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.22, rootMargin: '0px 0px -14% 0px' });
+      reveals.forEach(el => io.observe(el));
+      // Safety net: if anything is still hidden after 3s of being on screen, force it
+      setTimeout(() => {
+        document.querySelectorAll('.section-reveal:not(.section-in)').forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('section-in');
+        });
+        document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+          const r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('in');
+        });
+      }, 3000);
+    } else {
+      sectionReveals.forEach(el => el.classList.add('section-in'));
+      reveals.forEach(el => el.classList.add('in'));
+    }
+
+    // mobile nav
+    const navToggle = document.getElementById('navToggle');
+    const navToggleIcon = document.getElementById('navToggleIcon');
+    const navMobile = document.getElementById('navMobile');
+    const ICON_BURGER = '<path d="M4 7h16M4 12h16M4 17h16"/>';
+    const ICON_CLOSE  = '<path d="M6 6l12 12M18 6L6 18"/>';
+    const setNavOpen = (open) => {
+      navMobile.classList.toggle('hidden', !open);
+      navToggleIcon.innerHTML = open ? ICON_CLOSE : ICON_BURGER;
+      navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    navToggle.addEventListener('click', () => setNavOpen(navMobile.classList.contains('hidden')));
+    navMobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
+
+
+    // menu tabs
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('tab-active'));
+        btn.classList.add('tab-active');
+        const target = btn.dataset.tab;
+        panels.forEach(p => p.classList.toggle('hidden', p.dataset.panel !== target));
+      });
+    });
+
+    // gallery lightbox
+    const galItems = [...document.querySelectorAll('.gal-item')];
+    const sources = galItems.map(b => b.querySelector('img').getAttribute('src'));
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    let lbIdx = 0;
+
+    const openLb = (i) => { lbIdx = i; lbImg.src = sources[i]; lb.classList.remove('hidden'); lb.classList.add('flex'); document.body.style.overflow = 'hidden'; };
+    const closeLb = () => { lb.classList.add('hidden'); lb.classList.remove('flex'); document.body.style.overflow = ''; };
+    const stepLb = (d) => { lbIdx = (lbIdx + d + sources.length) % sources.length; lbImg.src = sources[lbIdx]; };
+
+    galItems.forEach((b, i) => b.addEventListener('click', () => openLb(i)));
+    document.getElementById('lbClose').addEventListener('click', closeLb);
+    document.getElementById('lbPrev').addEventListener('click', () => stepLb(-1));
+    document.getElementById('lbNext').addEventListener('click', () => stepLb(1));
+    lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', (e) => {
+      if (lb.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLb();
+      if (e.key === 'ArrowRight') stepLb(1);
+      if (e.key === 'ArrowLeft')  stepLb(-1);
+    });
+  </script>
+</body>
+</html>
