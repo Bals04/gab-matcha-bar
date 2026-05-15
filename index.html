@@ -49,7 +49,11 @@
       --coffee:#5a3a22;
       --ink:#1f2a1c;
     }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      max-width: 100%;
+      overflow-x: clip;
+    }
     html {
       scrollbar-color: var(--matcha) var(--parchment);
       scrollbar-width: thin;
@@ -73,6 +77,8 @@
       color: var(--ink);
       font-family: Inter, system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
+      max-width: 100%;
+      overflow-x: clip;
     }
     body.is-loading {
       overflow: hidden;
@@ -434,6 +440,27 @@
     .reveal-delay-1 { transition-delay: .15s; }
     .reveal-delay-2 { transition-delay: .3s; }
     .reveal-delay-3 { transition-delay: .45s; }
+
+    @media (max-width: 640px) {
+      .hero-copy {
+        padding-inline: 1rem;
+      }
+      .hero-copy h1 {
+        max-width: calc(100vw - 2rem);
+        font-size: clamp(2.75rem, 12vw, 3.25rem);
+        overflow-wrap: anywhere;
+      }
+      .hero-copy p {
+        max-width: calc(100vw - 2rem);
+      }
+      .hero-copy p:first-of-type {
+        letter-spacing: .2em;
+      }
+      .reveal-left,
+      .reveal-right {
+        transform: translateY(110px) scale(.94);
+      }
+    }
 
     /* Reduced motion: keep content visible and use only a short fade */
     @media (prefers-reduced-motion: reduce) {
